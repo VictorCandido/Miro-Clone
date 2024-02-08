@@ -54,5 +54,5 @@ npm run dev
 
 Also used:
 
-* [Convex](https://www.convex.dev/) as database and server functions
-* [ClerkJs](https://clerk.com/) as sign in and sign up manager
+* [Convex](https://www.convex.dev/) for database and server functions
+* [ClerkJs](https://clerk.com/) for sign in and sign up manager

@@ -39,3 +39,66 @@ export const create = mutation({
         return board;
     }
 });
+
+export const remove = mutation({
+    args: {
+        id: v.id('boards'),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new Error('Unauthorized');
+        }
+
+        const board = await ctx.db.get(args.id);
+
+        if (!board) {
+            throw new Error('Not found');
+        }
+
+        if (board.authorId !== identity.subject) {
+            throw new Error('Unauthorized');
+        }
+
+        // TODO: Later check to delete favorite relation as well
+
+        await ctx.db.delete(args.id);
+    }
+});
+
+export const update = mutation({
+    args: {
+        id: v.id('boards'),
+        title: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new Error('Unauthorized');
+        }
+
+        const title = args.title.trim();
+
+        if (!title) {
+            throw new Error('Title is required');
+        }
+
+        const board = await ctx.db.get(args.id);
+
+        if (!board) {
+            throw new Error('Not found');
+        }
+
+        if (board.authorId !== identity.subject) {
+            throw new Error('Unauthorized');
+        }
+
+        const updatedBoard = await ctx.db.patch(args.id, {
+            title: args.title,
+        });
+
+        return updatedBoard;
+    }
+});

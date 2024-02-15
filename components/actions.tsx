@@ -40,7 +40,7 @@ const Actions = ({
 
     const onDelete = async () => {
         try {
-            mutate({ id });
+            await mutate({ id });
             toast.success('Board deleted');
         } catch (error) {
             toast.error('Failed to delete board');
